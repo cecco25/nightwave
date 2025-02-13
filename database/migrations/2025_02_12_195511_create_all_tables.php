@@ -36,22 +36,22 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Tabella biglietti
-        Schema::create('tickets', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
-            $table->foreignId('ticket_type_id')->constrained('types')->nullOnDelete();
-            $table->integer('amount');
-            $table->decimal('price', 8, 2);
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
-            $table->timestamps();
-        });
-
         // Tabella tipi biglietto
         Schema::create('ticket_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->timestamps();
+        });
+
+        // Tabella biglietti
+        Schema::create('tickets', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
+            $table->foreignId('ticket_type_id')->constrained('ticket_types')->onDelete('cascade');
+            $table->integer('amount');
+            $table->decimal('price', 8, 2);
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
             $table->timestamps();
         });
 

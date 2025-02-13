@@ -20,7 +20,7 @@ import { Toaster } from '@/Components/ui/toaster';
 import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
-    email: z.string().email({ message: 'Invalid email address' }),
+    email: z.string().email({ message: 'Email non valida' }),
     password: z
         .string()
         .min(8, { message: 'La password deve essere almeno di 8 caratteri' })

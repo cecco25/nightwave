@@ -112,13 +112,13 @@ export default function Register() {
             <Head title="Registrati" />
             <Toaster></Toaster>
             <div className="flex min-h-screen items-center justify-center">
-                <Card className="mx-auto w-full max-w-xl">
-                    <CardHeader>
+                <Card className="mx-auto w-full max-w-xl border-0 p-3 sm:border sm:p-6">
+                    <CardHeader className="p-3 sm:p-6">
                         <CardTitle className="text-2x font-title">
                             Registrati
                         </CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="p-3 sm:p-6">
                         <Form {...form}>
                             <form
                                 onSubmit={form.handleSubmit(onSubmit)}

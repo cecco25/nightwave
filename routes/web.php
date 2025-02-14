@@ -11,8 +11,16 @@ Route::group(['middleware' => 'auth'], function () {
     })->name("home");
 });
 
-Route::get('login', function () {
-    return Inertia::render('Login');
-})->name('login');
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('login', function () {
+        return Inertia::render('Login');
+    })->name('login');
 
-Route::post('login', [AuthController::class, 'login']);
+    Route::post('login', [AuthController::class, 'login']);
+
+    Route::get("registrati", function () {
+        return Inertia::render('Register');
+    })->name("registrati");
+
+    Route::post("registrati", [AuthController::class, 'register']);
+});

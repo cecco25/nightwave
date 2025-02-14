@@ -80,3 +80,11 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* Date picker style to edit dropwdown buttons */
+.rdp-caption_dropdowns select {
+    @apply rounded-md border border-border bg-transparent text-foreground;
+}
+.rdp-dropdown_icon {
+    @apply hidden;
+}

@@ -61,4 +61,10 @@ class AuthController extends Controller
             return response()->json(['message' => 'Registration failed'], 500);
         }
     }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect('/login');
+    }
 }

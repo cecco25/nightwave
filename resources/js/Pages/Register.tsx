@@ -88,7 +88,7 @@ export default function Register() {
                 });
                 setTimeout(() => {
                     window.location.href = '/';
-                }, 2000);
+                }, 1500);
             } else {
                 const errorData = await response.json();
                 toast({

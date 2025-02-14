@@ -72,7 +72,7 @@ export default function Login() {
                 });
                 setTimeout(() => {
                     window.location.href = '/';
-                }, 2000);
+                }, 1500);
             } else {
                 const errorData = await response.json();
                 toast({

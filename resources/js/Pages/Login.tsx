@@ -1,9 +1,7 @@
 'use client';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Head, Link } from '@inertiajs/react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Button } from '@/Components/ui/button';
@@ -18,9 +16,11 @@ import {
 } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
 import { PasswordInput } from '@/Components/ui/password-input';
+import { Toaster } from '@/Components/ui/toaster';
+import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
-    email: z.string().email({ message: 'Invalid email address' }),
+    email: z.string().email({ message: 'Email non valida' }),
     password: z
         .string()
         .min(8, { message: 'La password deve essere almeno di 8 caratteri' })
@@ -39,6 +39,8 @@ const formSchema = z.object({
 });
 
 export default function Login() {
+    const { toast } = useToast();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -49,23 +51,49 @@ export default function Login() {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            console.log(values);
-            toast(
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">
-                        {JSON.stringify(values, null, 2)}
-                    </code>
-                </pre>,
+            const csrfTokenMeta = document.querySelector(
+                'meta[name="csrf-token"]',
             );
+            const csrfToken = csrfTokenMeta?.getAttribute('content') || '';
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: JSON.stringify(values),
+            });
+
+            if (response.ok) {
+                toast({
+                    title: 'Login effettuato',
+                    variant: 'success',
+                });
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1500);
+            } else {
+                const errorData = await response.json();
+                toast({
+                    title: errorData.message,
+                    variant: 'destructive',
+                });
+            }
         } catch (error) {
             console.error('Form submission error', error);
-            toast.error('Failed to submit the form. Please try again.');
+            toast({
+                title: 'Errore',
+                description: 'Si è verificato un errore durante il login',
+                variant: 'destructive',
+            });
         }
     }
 
     return (
         <>
             <Head title="Accedi" />
+            <Toaster />
             <div className="flex min-h-screen items-center justify-center">
                 <Card className="mx-auto w-96 max-w-sm">
                     <CardHeader>
@@ -137,7 +165,7 @@ export default function Login() {
                         </Form>
                         <div className="mt-4 text-center text-sm">
                             Non hai un account?{' '}
-                            <Link href="#" className="underline">
+                            <Link href="/registrati" className="underline">
                                 Registrati
                             </Link>
                         </div>

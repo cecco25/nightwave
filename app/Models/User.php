@@ -26,7 +26,6 @@ class User extends Authenticatable
         'date_of_birth',
         'gender',
         'is_verified',
-        'remember_token'
     ];
 
     /**
